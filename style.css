@@ -1,0 +1,64 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+body {
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    text-align: center;
+    color:whitesmoke;
+          background: url(https://images.unsplash.com/photo-1435224654926-ecc9f7fa028c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80) right bottom fixed no-repeat;
+    background-size:100%;
+    background-color: black;
+}
+.container{
+    position: relative;
+    margin: auto;
+    text-align: left;
+    
+    width: 760px;
+}
+.message{
+    margin: auto;
+    width:50%;
+    border:3px solid rgb(146, 243, 146);
+    padding:10px;
+    text-align:center;
+    color:whitesmoke;
+     }
+
+marquee{font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-size:23;
+    color: rgb(236, 252, 9);}
+
+h1,h2{font-family: Tahoma, Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+  text-shadow: 1px 1px 2px rgb(115, 115, 202), 0 0 25px red, 0 0 5px darkblue;
+}
+.sidebar {
+    margin:auto;
+    color:whitesmoke;
+    position: absolute;
+    top: 200px;
+    left: 3%;
+    width: 20%;
+   
+    
+}
+a, a:link, a:visited {
+    color: #e4fcc0;
+    text-decoration: underline;
+}
+a:hover {
+    color:red;
+    text-decoration: underline;
+}
+
+.rounded{
+    margin: auto;
+    
+    
+    
+    text-align:center;
+    color:whitesmoke;
+     }

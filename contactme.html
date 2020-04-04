@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>Contact Me</title>
+<link rel="stylesheet" media="screen" href="style.css">
+
+
+</head>
+<body class="row" class="container">
+    
+        
+    <div class="col">
+    <h1>Contact Me</h1>
+    <marquee >Welcome to this website</marquee>
+  </div>
+
+  <aside  class="sidebar" role="complementary">
+   <div class="wrapper">
+      <div class="selection" id="website-selection">
+         <h3 class="select">Page Menu:</h3><br>
+         <nav role="navigation" class="a">
+            <ul>
+                  <li> <a href="index.html" >Home Page</a> </li><br>                     
+                  <li> <a href="aboutme.html" >About Me</a> </li><br>		
+                  <li> <a href="myhobby.html" >My Hobby</a> </li><br>		
+                  <li> <a href="contactme.html" >Contact Me</a> </li><br>
+                  <li> <a href="https://www.polyu.edu.hk/" >About My School</a> </li><br>
+            </ul>
+         </nav>
+      </div>
+ </aside>
+    <br><br><br><br><br>
+    
+    <div >
+            <img src="https://miro.medium.com/max/1400/1*pFIEuPFPiLy0DCG5OdMgDw.jpeg" width="50%"height="50%"  ></img>
+    </div><br>
+
+   <div class="message" class="col" color="whitesmoke";>
+     <p>Nice to meet you guys.
+     If you have any questions or want to chat with me by using email, you can fill the form. 
+     I will answer you as soon as possible.
+     </p><br>
+ 
+      <p><font size="+1">
+                <div style="text-align:center;">
+        <form name="myForm" id="myForm" method="post"
+         action="mailto:nathanlui58@gmail.com?subject='Mypersonalpage'">
+         <label>  Name: </label>
+         <input type="text" name="Name" size="25" />
+        <br><br>
+       
+        
+         <p>Are you satisfy with my personal webpage?
+         <select name="Satisfy level">
+         <option value="2" selected="selected" > good
+        </option>
+         <option value="3">not bad </option>
+         <option value="4">bad </option>
+         </select> </p>
+         <br>
+        
+         <p> Your comment/questions: </p>
+         <textarea name="comment" rows="10" cols="30">
+         what you want to tell me...... </textarea>
+         <p>
+         <br>
+
+        <input name="things" type="checkbox" value="1" />   
+        Want my contact number?
+         </p>
+        
+         <p > <input id="se" type="submit" value="Submit" />
+         <input id="cl" type="reset" value="Clear" /> </p>
+        
+        </form></div></font>
+        </p>
+       
+   </div>
+
+             <script>
+ 
+                document.getElementById("cl").onclick = function(){
+                   alert("The form will clear now!");
+                  };  
+               </script>
+
+              <script>
+ 
+                document.getElementById("se").onclick = function(){
+                   alert("Open your mail box and send it now!");
+                  };  
+               </script>
+
+</body>
+
+</html>
+
+
+
+
