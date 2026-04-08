@@ -825,7 +825,7 @@ function parseJSONItems(data, category) {
         time: pubDate ? timeAgo(pubDate) : '',
         pubDate: pubDate,
         img: img,
-        body: bodyText.length > 50 ? bodyText : title + '。詳情請閱讀原文報導。',
+        body: bodyText.length > 100 ? bodyText : title + '。詳情請閱讀原文報導。',
         link: link,
       };
     });
