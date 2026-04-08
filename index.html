@@ -2,17 +2,18 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
+
+<!-- Google AdSense 驗證 — 必須在最前面 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1692670290595476" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-1692670290595476">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#ffffff">
+<meta name="description" content="焦點日報 — 智慧新聞聚合應用，即時掌握頭條、科技、財經、體育、娛樂最新動態。">
 <title>焦點日報 — 智慧新聞</title>
 <link rel="manifest" href="manifest.json">
-
-<!-- ============================================================
-     Google AdSense — 請將 ca-pub-1692670290595476 替換為你的 AdSense 發布商 ID
-     ============================================================ -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1692670290595476" crossorigin="anonymous"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -185,6 +186,10 @@ body {
   from { opacity:0; transform:translateY(16px); }
   to { opacity:1; transform:translateY(0); }
 }
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to { transform:rotate(360deg); }
+}
 .news-card .thumb {
   width:100px; height:76px;
   border-radius:var(--radius-sm);
@@ -256,6 +261,43 @@ body {
   color:var(--text3);
   font-size:12px;
 }
+
+/* === Pagination === */
+.pagination {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:16px 12px 24px;
+}
+.page-btn {
+  min-width:36px; height:36px;
+  border-radius:8px;
+  border:1.5px solid var(--bg3);
+  background:var(--card);
+  color:var(--text);
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 10px;
+  transition:all .2s;
+}
+.page-btn:active { transform:scale(0.95); }
+.page-btn.active {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.page-info {
+  width:100%;
+  text-align:center;
+  font-size:12px;
+  color:var(--text3);
+  margin-top:4px;
+}
+
 .ad-banner-bottom {
   position:fixed;
   bottom:calc(var(--tab-h) + var(--safe-b));
@@ -656,56 +698,235 @@ body {
 // =============================================
 
 // === NEWS DATA ===
-const NEWS = [
-  {cat:'頭條',title:'台積電宣布三奈米製程量產突破，全球半導體格局將重塑',src:'科技新報',time:'22分鐘前',
-   img:'https://picsum.photos/seed/tsmc/400/300',
-   body:'台積電今日在法說會上宣布，其三奈米先進製程良率已突破90%大關，遠超市場預期。這一突破性進展意味著全球最先進的晶片製造技術正式進入成熟量產階段。分析師指出，此舉將進一步鞏固台積電在全球半導體產業鏈中的領導地位，同時對英特爾和三星的追趕策略構成重大壓力。業界預估，新製程將率先應用於蘋果下一代處理器及輝達的AI加速晶片。'},
-  {cat:'頭條',title:'央行意外降息一碼，房市與股市迎來新一輪資金潮',src:'經濟日報',time:'1小時前',
-   img:'https://picsum.photos/seed/bank/400/300',
-   body:'中央銀行今日召開理監事會議，決議調降政策利率一碼（0.25個百分點），此舉出乎市場預料。央行總裁表示，全球經濟放緩風險升高，降息旨在提前因應外部衝擊。市場反應迅速，加權股價指數午盤大漲逾300點，房地產類股更是全面漲停。房仲業者預估，降息效應將在未來三個月內帶動房市交易量回升至少兩成。'},
-  {cat:'科技',title:'蘋果發布全新Vision Pro 2，售價大幅調降至千美元以下',src:'蘋果新聞',time:'3小時前',
-   img:'https://picsum.photos/seed/apple/400/300',
-   body:'蘋果公司在春季發表會上正式推出第二代混合實境頭戴裝置Vision Pro 2，最引人注目的是其起售價降至999美元，較初代產品降幅超過七成。新裝置採用M4晶片，重量減輕40%，續航力提升至4小時。蘋果CEO庫克表示，空間運算是未來十年的重要趨勢，降價策略旨在加速市場普及。首批上市地區包含台灣在內的十五個國家。'},
-  {cat:'科技',title:'OpenAI推出GPT-5，多模態能力全面超越人類基準',src:'TechCrunch',time:'5小時前',
-   img:'https://picsum.photos/seed/openai/400/300',
-   body:'OpenAI正式發布其最新大型語言模型GPT-5，在推理、數學、程式撰寫和多語言理解等多項基準測試中首次全面超越人類專家水平。新模型支援即時影片分析和長達百萬token的上下文窗口，並且推理成本較GPT-4降低十倍。此消息帶動AI相關概念股全面大漲。'},
-  {cat:'科技',title:'台灣新創推出全球首款石墨烯電池手機，充電僅需15分鐘',src:'數位時代',time:'6小時前',
-   img:'https://picsum.photos/seed/battery/400/300',
-   body:'總部位於新竹的新創公司「能源芯」今日發布全球首款搭載石墨烯電池的智慧型手機原型機。該電池容量達5000mAh，從零充至滿電僅需15分鐘，且經過3000次充放電循環後容量衰減不到5%。公司表示已與多家國際手機品牌洽談技術授權，預計明年上半年可在市售機種中看到此技術。'},
-  {cat:'財經',title:'比特幣突破十五萬美元大關，機構資金持續湧入現貨ETF',src:'CoinDesk中文',time:'45分鐘前',
-   img:'https://picsum.photos/seed/btc/400/300',
-   body:'比特幣價格今日突破15萬美元整數關口，創下歷史新高。鏈上數據顯示，美國現貨比特幣ETF連續第四週錄得淨流入，單週流入金額達42億美元。分析師指出，聯準會降息預期升溫加上機構配置需求持續擴大，為本輪漲勢提供了堅實支撐。鏈上持有超過1000枚比特幣的鯨魚地址數量創下年內新高。'},
-  {cat:'財經',title:'外資連續買超台股二十個交易日，累計金額破千億',src:'工商時報',time:'2小時前',
-   img:'https://picsum.photos/seed/stock/400/300',
-   body:'外資法人持續看好台灣科技股，已連續二十個交易日買超台股，累計買超金額突破新台幣一千億元。法人分析，AI伺服器供應鏈的強勁需求是吸引外資回流的主因，其中台積電、鴻海及廣達為主要買超標的。市場預期，在第二季財報旺季來臨前，外資買盤動能仍將維持強勁。'},
-  {cat:'財經',title:'日圓兌美元跌破160關口，日本央行面臨干預壓力',src:'路透社',time:'4小時前',
-   img:'https://picsum.photos/seed/yen/400/300',
-   body:'日圓匯率持續走弱，今日盤中兌美元匯率跌破160大關，創下近三十年來新低。日本央行面臨越來越大的市場干預壓力。日本財務大臣發表聲明，強調將對匯率過度波動採取「果斷行動」。分析師認為，美日利差持續擴大是日圓走貶的根本原因。'},
-  {cat:'體育',title:'戴資穎宣布復出參加巴黎奧運，目標衝擊生涯第二面金牌',src:'運動視界',time:'1小時前',
-   img:'https://picsum.photos/seed/badm/400/300',
-   body:'台灣羽球天后戴資穎今日在個人社群媒體上正式宣布復出，將代表中華隊參加即將到來的奧運會。她表示，經過一年的休養和訓練調整，身體狀態已恢復到巔峰水平。教練團透露，戴資穎近期在內部對抗賽中表現出色，有信心在奧運賽場上爭取佳績。此消息一出，立即引爆社群媒體討論。'},
-  {cat:'體育',title:'中職聯盟宣布第六隊加入，台灣職棒邁入新紀元',src:'ETtoday體育',time:'3小時前',
-   img:'https://picsum.photos/seed/baseball/400/300',
-   body:'中華職棒大聯盟今日正式宣布，來自高雄的企業財團獲准成立第六支球隊，預計明年球季起參與聯賽。這是中職自成立以來第三次擴編，也是睽違多年後再度迎來新球團。聯盟會長表示，第六隊的加入將有效解決賽程密度不足的問題，也將為南部球迷帶來主場球隊的歸屬感。'},
-  {cat:'體育',title:'NBA季後賽：湖人隊逆轉勝晉級，詹姆斯砍下40分三雙',src:'NBA台灣',time:'6小時前',
-   img:'https://picsum.photos/seed/nba/400/300',
-   body:'洛杉磯湖人隊在NBA季後賽首輪第七戰中上演驚天逆轉，在第四節落後15分的情況下完成反超，最終以118比112擊敗對手晉級第二輪。詹姆斯全場攻下40分、12籃板、11助攻的大三雙數據，展現出無與倫比的季後賽統治力。'},
-  {cat:'娛樂',title:'五月天宣布亞洲巡迴演唱會，台北小巨蛋連開十場',src:'KKBOX',time:'30分鐘前',
-   img:'https://picsum.photos/seed/concert/400/300',
-   body:'天團五月天今日宣布全新「再一次勇敢」亞洲巡迴演唱會計劃，首站將於台北小巨蛋連續開唱十場。門票將於下週三中午12點開放搶購，主辦單位已啟用實名制購票系統以防止黃牛。五月天表示，全新的舞台設計將採用360度環形舞台，讓每個座位都擁有最佳視角。'},
-  {cat:'娛樂',title:'金馬獎入圍名單揭曉，新銳導演作品橫掃七項提名',src:'娛樂星聞',time:'2小時前',
-   img:'https://picsum.photos/seed/film/400/300',
-   body:'第63屆金馬獎入圍名單今日揭曉，年僅28歲的新銳導演林書宇執導的《天光》以最佳影片、最佳導演等七項提名領跑。這部以白色恐怖時期為背景的歷史劇情片在今年坎城影展首映時即獲得長達八分鐘的起立鼓掌。頒獎典禮將於十一月底盛大舉行。'},
-  {cat:'娛樂',title:'Netflix公布2026年華語原創內容計劃，投資金額倍增',src:'影視產業',time:'5小時前',
-   img:'https://picsum.photos/seed/netflix/400/300',
-   body:'Netflix今日在台北舉行年度華語內容發布會，宣布2026年華語原創內容投資金額將較去年倍增，預計推出超過二十部原創劇集和電影。其中包括與金獎導演侯孝賢監製團隊合作的歷史大劇，以及多部探討當代社會議題的都市劇。Netflix亞太區副總裁表示，台灣已成為華語內容創作的重要基地。'},
-  {cat:'頭條',title:'全球碳交易市場正式啟動，台灣碳權交易所同步開市',src:'環境資訊',time:'4小時前',
-   img:'https://picsum.photos/seed/carbon/400/300',
-   body:'聯合國支持的全球統一碳交易市場今日正式啟動運作，台灣碳權交易所也同步開始交易。首日碳權成交均價為每噸32美元，交易量超出預期三倍。環境部長表示，碳交易機制的建立是台灣邁向2050淨零排放目標的重要里程碑。首批參與交易的企業包含台積電、中鋼等大型排碳企業。'},
-  {cat:'科技',title:'聯發科發布天璣9400旗艦晶片，AI效能提升三倍',src:'電子時報',time:'7小時前',
-   img:'https://picsum.photos/seed/mtk/400/300',
-   body:'聯發科技今日正式發布新一代旗艦行動處理器天璣9400，採用台積電三奈米製程，整合全新APU（AI處理單元），AI運算效能較上一代提升三倍。新晶片支援端側大型語言模型運行，可在手機本地端執行70億參數的AI模型。聯發科表示，首批搭載天璣9400的旗艦手機將於下季度上市。'},
+// 預設模擬資料（離線備用 — 香港新聞）
+const FALLBACK_NEWS = [
+  {cat:'頭條',title:'美伊達成停火協議 全球油價急跌逾5% 亞洲股市普遍大漲',src:'香港電台',time:'1小時前',
+   img:'https://picsum.photos/seed/iran/400/300',
+   body:'美國與伊朗達成有條件停火兩週協議，德黑蘭重開霍爾木茲海峽航道。消息傳出後國際油價暴跌超過5%，布蘭特期油跌穿每桶65美元關口。亞洲股市普遍造好，港股恒生指數大漲逾700點，成交突破3700億元。分析指停火協議有助緩解全球能源危機擔憂。'},
+  {cat:'頭條',title:'大埔宏福苑五級火聽證會 消防承辦商承認未親自到場視察',src:'明報',time:'2小時前',
+   img:'https://picsum.photos/seed/fire/400/300',
+   body:'大埔宏福苑五級火災聽證會繼續進行，消防裝置承辦商中華發展承認，在遞交消防裝置關閉通知書前，未有派員到宏福苑實地視察。律師會已設立義務法律諮詢熱線，至今接觸約600宗個案。居民聯署要求召開業主大會，管理公司回應稱資料未符法定要求。'},
+  {cat:'頭條',title:'鄧炳強稱本港仍面對國安風險 公布六項策略打擊軟對抗',src:'星島日報',time:'3小時前',
+   img:'https://picsum.photos/seed/security/400/300',
+   body:'保安局局長鄧炳強表示，香港仍然面對國家安全風險，公布六項策略打擊軟對抗行為，包括強化情報體系、加強執法能力、完善法律框架等。他強調特區政府會繼續堅定維護國家安全，同時保障市民的合法權利和自由。'},
+  {cat:'科技',title:'OpenAI、Anthropic與Google罕見合作 聯手打擊AI模型蒸餾行為',src:'Yahoo科技',time:'2小時前',
+   img:'https://picsum.photos/seed/aicolab/400/300',
+   body:'三大AI巨頭OpenAI、Anthropic和Google罕見聯手合作，宣布將共同打擊競爭對手透過蒸餾技術非法複製其AI模型的行為。業界認為此舉主要針對部分中國AI公司，三家企業計劃建立技術標準和法律框架保護知識產權。'},
+  {cat:'科技',title:'蘋果據報明年推出摺疊iPhone 供應鏈已開始備貨',src:'經濟日報',time:'4小時前',
+   img:'https://picsum.photos/seed/foldphone/400/300',
+   body:'據供應鏈消息，蘋果已確認將於明年推出首款摺疊屏幕iPhone，目前已向多家亞洲供應商下達備貨訂單。新裝置將採用內折式設計，屏幕展開後約7.5吋。分析師預計售價將超過2000美元，首年出貨量約1500萬至2000萬部。'},
+  {cat:'科技',title:'香港數碼港初創獲得10億融資 專注AI醫療診斷技術',src:'香港01',time:'5小時前',
+   img:'https://picsum.photos/seed/startup/400/300',
+   body:'數碼港培育的AI醫療初創企業MedAI今日宣布完成B輪10億港元融資，由紅杉中國和淡馬錫聯合領投。該公司開發的AI影像診斷系統已獲FDA和CE認證，可在數秒內分析X光和CT掃描影像，準確率達97%以上。'},
+  {cat:'財經',title:'港股恒指大漲776點收市 成交突破3700億元創三週新高',src:'RTHK',time:'1小時前',
+   img:'https://picsum.photos/seed/hkstock/400/300',
+   body:'港股今日大幅反彈，恒生指數收報22,456點，大漲776點或3.6%，創三星期以來新高。成交金額增至逾3700億港元。科技股領漲，阿里巴巴升逾5%，騰訊升近4%。分析師指美伊停火消息及內地刺激經濟政策預期是主要推動力。'},
+  {cat:'財經',title:'滬深股市大漲 創業板指數飆升近6% 北向資金淨買入逾百億',src:'財華社',time:'2小時前',
+   img:'https://picsum.photos/seed/astock/400/300',
+   body:'內地A股今日全線大漲，上證指數收升約2.7%，深證成指升3.5%，創業板指數更飆升近6%。北向資金全日淨買入超過100億元人民幣。市場憧憬內地將推出新一輪經濟刺激措施，加上美伊停火利好消息帶動全球風險偏好回升。'},
+  {cat:'財經',title:'金管局：香港銀行體系穩健 毋須跟隨美國減息',src:'信報',time:'4小時前',
+   img:'https://picsum.photos/seed/hkma/400/300',
+   body:'金融管理局總裁余偉文表示，香港銀行體系保持穩健，資本充足率遠高於國際標準。他指出在聯繫匯率制度下，港息走勢主要受本地資金供求影響，不一定需要完全跟隨美國利率調整步伐。目前銀行間拆息維持平穩。'},
+  {cat:'體育',title:'拜仁作客擊敗皇馬 哈利每能復出即建功 歐聯八強首回合',src:'波經',time:'1小時前',
+   img:'https://picsum.photos/seed/ucl/400/300',
+   body:'歐洲冠軍聯賽八強首回合賽事，拜仁慕尼黑作客伯納烏球場以2比1擊敗皇家馬德里。英格蘭前鋒哈利每復出即建功，於下半場射入關鍵入球。另一場賽事，阿仙奴憑補時絕殺以1比0險勝士砲廸。'},
+  {cat:'體育',title:'全紅嬋等內地運動員遭網暴 廣東體育局報警 國家體育總局介入',src:'南華早報',time:'3小時前',
+   img:'https://picsum.photos/seed/sports2/400/300',
+   body:'內地跳水運動員全紅嬋等多名國家隊成員近日在社交媒體上遭受嚴重網絡暴力，廣東省體育局已向警方報案。國家體育總局亦發表聲明介入調查，強調將依法追究相關責任人。事件引發社會廣泛關注運動員心理健康保護議題。'},
+  {cat:'體育',title:'香港足總盃四強抽籤 傑志對東方 冠忠南區對標準流浪',src:'體路',time:'5小時前',
+   img:'https://picsum.photos/seed/hkfootball/400/300',
+   body:'香港足總盃四強抽籤結果出爐，由傑志對陣東方龍獅，冠忠南區對標準流浪。兩場準決賽將於本月底在旺角大球場舉行。傑志主教練表示球隊狀態良好，目標是第五度奪得足總盃冠軍。'},
+  {cat:'娛樂',title:'方力申登台與「高仿鄧麗欣」同唱《好心好報》 引爆社交媒體討論',src:'香港01',time:'2小時前',
+   img:'https://picsum.photos/seed/alexfong/400/300',
+   body:'藝人方力申日前出席商場活動，主辦方安排一名外貌酷似其前度鄧麗欣的模仿者同台合唱經典歌曲《好心好報》。片段在社交媒體上廣泛流傳，引發網民熱議。方力申事後表示事前並不知情，認為安排有欠妥當。'},
+  {cat:'娛樂',title:'第43屆香港電影金像獎提名名單公布 《風再起時》領跑八項提名',src:'明報娛樂',time:'4小時前',
+   img:'https://picsum.photos/seed/hkfilm/400/300',
+   body:'第43屆香港電影金像獎提名名單今日揭曉，翁子光執導的《風再起時》以八項提名領跑，包括最佳電影、最佳導演、最佳男主角等。頒獎典禮將於下月在尖沙咀文化中心舉行。今屆入圍作品題材多元，反映香港電影業的創作活力。'},
+  {cat:'娛樂',title:'Netflix宣布加碼投資香港原創內容 明年推出五部港產劇集',src:'HK01',time:'6小時前',
+   img:'https://picsum.photos/seed/netflix2/400/300',
+   body:'串流平台Netflix今日在港舉行發布會，宣布將加碼投資香港原創內容，預計明年推出五部港產原創劇集，涵蓋懸疑、愛情、社會寫實等多種題材。Netflix亞太區副總裁表示，香港的創作人才和獨特文化是平台選擇加大投資的主要原因。'},
+  {cat:'頭條',title:'天文台預測本週後期氣溫驟降至16度 或成今年最遲寒潮',src:'天文台',time:'5小時前',
+   img:'https://picsum.photos/seed/weather/400/300',
+   body:'香港天文台預測一股強烈冷空氣將於本週後期抵達華南沿岸，届時氣溫將顯著下降，市區最低氣溫或跌至16度左右。天文台指若預測成真，將成為今年最遲出現的寒潮天氣。市民應注意適時添衣保暖。'},
 ];
+
+// 即時新聞資料（從 RSS 抓取後填入）
+let NEWS = [...FALLBACK_NEWS];
+
+// === RSS 即時新聞抓取（香港新聞來源）===
+// 使用多個來源確保每個分類都有足夠內容
+const RSS_FEEDS = {
+  '頭條': [
+    'https://news.google.com/rss?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+    'https://rthk.hk/rthk/news/rss/c_expressnews_clocal.xml',
+    'https://rthk.hk/rthk/news/rss/c_expressnews_cinternational.xml',
+  ],
+  '科技': [
+    'https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+    'https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+  ],
+  '財經': [
+    'https://rthk.hk/rthk/news/rss/c_expressnews_cfinance.xml',
+    'https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+  ],
+  '體育': [
+    'https://rthk.hk/rthk/news/rss/c_expressnews_csport.xml',
+    'https://news.google.com/rss/headlines/section/topic/SPORTS?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+  ],
+  '娛樂': [
+    'https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+    'https://news.google.com/rss/headlines/section/topic/LIFESTYLE?hl=zh-HK&gl=HK&ceid=HK:zh-Hant',
+  ],
+};
+
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+const PAGE_SIZE = 15;
+const MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 小時
+
+function timeAgo(dateStr) {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diff = Math.floor((now - date) / 1000);
+  if (diff < 0 || isNaN(diff)) return '剛剛';
+  if (diff < 60) return '剛剛';
+  if (diff < 3600) return Math.floor(diff / 60) + '分鐘前';
+  if (diff < 86400) return Math.floor(diff / 3600) + '小時前';
+  if (diff < 604800) return Math.floor(diff / 86400) + '天前';
+  return date.toLocaleDateString('zh-HK');
+}
+
+function isWithin24h(dateStr) {
+  if (!dateStr) return true; // 無日期的預設保留
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return true;
+  return (Date.now() - date.getTime()) < MAX_AGE_MS;
+}
+
+function parseJSONItems(data, category) {
+  if (!data || !data.items) return [];
+  return data.items
+    .filter(item => isWithin24h(item.pubDate))
+    .slice(0, 15)
+    .map(item => {
+      const title = item.title || '';
+      const source = item.author || '新聞來源';
+      const pubDate = item.pubDate || '';
+      const link = item.link || '';
+      const desc = item.description || '';
+      const imgMatch = desc.match(/src="([^"]+)"/);
+      const img = imgMatch ? imgMatch[1] : (item.thumbnail || `https://picsum.photos/seed/${encodeURIComponent(title.slice(0,6))}/400/300`);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = desc;
+      const bodyText = tempDiv.textContent.trim() || title;
+      return {
+        cat: category,
+        title: title,
+        src: source,
+        time: pubDate ? timeAgo(pubDate) : '',
+        pubDate: pubDate,
+        img: img,
+        body: bodyText.length > 50 ? bodyText : title + '。詳情請閱讀原文報導。',
+        link: link,
+      };
+    });
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function fetchRSSFeed(category, url) {
+  try {
+    const resp = await fetch(RSS2JSON + encodeURIComponent(url), {
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (data.status !== 'ok') throw new Error('RSS status: ' + data.status);
+    return parseJSONItems(data, category);
+  } catch (e) {
+    console.warn(`RSS 抓取失敗 (${category}):`, e.message);
+    return [];
+  }
+}
+
+let isFetchingNews = false;
+
+async function fetchAllNews(showToastMsg = false) {
+  if (isFetchingNews) return;
+  isFetchingNews = true;
+  if (showToastMsg) render(); // 更新旋轉圖示
+
+  try {
+    const liveNews = [];
+    const seenTitles = new Set();
+
+    // 逐個分類抓取，每個來源間加入延遲避免頻率限制
+    for (const [cat, urls] of Object.entries(RSS_FEEDS)) {
+      const catItems = [];
+
+      for (let i = 0; i < urls.length; i++) {
+        if (i > 0) await delay(300); // 每個請求間隔 300ms
+        const items = await fetchRSSFeed(cat, urls[i]);
+        items.forEach(item => {
+          const key = item.title.slice(0, 20);
+          if (!seenTitles.has(key)) {
+            seenTitles.add(key);
+            catItems.push(item);
+          }
+        });
+      }
+
+      // 如果即時來源不夠，從備用資料補充
+      if (catItems.length < PAGE_SIZE) {
+        const fallbackForCat = FALLBACK_NEWS.filter(n => n.cat === cat);
+        fallbackForCat.forEach(item => {
+          const key = item.title.slice(0, 20);
+          if (!seenTitles.has(key)) {
+            seenTitles.add(key);
+            catItems.push(item);
+          }
+        });
+      }
+
+      // 保留所有抓到的新聞（不截斷），分頁由 renderFeed 處理
+      liveNews.push(...catItems);
+    }
+
+    if (liveNews.length >= 5) {
+      NEWS = liveNews;
+      // 快取到 localStorage
+      try {
+        localStorage.setItem('cachedNews', JSON.stringify(liveNews));
+        localStorage.setItem('cachedNewsTime', Date.now().toString());
+      } catch(e) {}
+      if (showToastMsg) showToast('已更新 ' + liveNews.length + ' 篇即時新聞');
+    } else {
+      // 即時資料不足，嘗試用快取
+      loadCachedNews();
+      if (showToastMsg) showToast('使用快取新聞');
+    }
+  } catch(e) {
+    loadCachedNews();
+    if (showToastMsg) showToast('更新失敗，使用快取資料');
+  } finally {
+    isFetchingNews = false;
+    render();
+  }
+}
+
+function loadCachedNews() {
+  try {
+    const cached = localStorage.getItem('cachedNews');
+    const cachedTime = localStorage.getItem('cachedNewsTime');
+    if (cached && cachedTime) {
+      const age = Date.now() - parseInt(cachedTime);
+      if (age < 3600000 * 6) { // 快取有效期 6 小時
+        NEWS = JSON.parse(cached);
+        return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
 
 const CATEGORIES = ['頭條','科技','財經','體育','娛樂'];
 const CAT_ICONS = {'頭條':'🔥','科技':'💻','財經':'📈','體育':'⚽','娛樂':'🎬'};
@@ -714,6 +935,7 @@ const CAT_ICONS = {'頭條':'🔥','科技':'💻','財經':'📈','體育':'⚽
 let state = {
   tab: 0, // 0=home,1=categories,2=earnings,3=settings
   cat: '頭條',
+  page: 1, // 新聞分頁
   theme: localStorage.getItem('theme') || 'light',
   pubId: localStorage.getItem('pubId') || 'ca-pub-1692670290595476',
   adDensity: localStorage.getItem('adDensity') || 'medium',
@@ -753,12 +975,11 @@ function render() {
             <!-- ====================================
                  AdSense 插頁式廣告單元
                  替換 data-ad-client 為你的發布商 ID
-                 替換 data-ad-slot 為你的廣告單元 ID
                  ==================================== -->
             <ins class="adsbygoogle"
                  style="display:block;width:100%;height:200px"
                  data-ad-client="${state.pubId}"
-                 data-ad-slot="INTERSTITIAL_SLOT_ID"
+                 data-ad-slot="2963123186"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
             <span style="font-size:11px;color:var(--text3)">插頁式廣告單元<br>AdSense Interstitial</span>
@@ -801,6 +1022,7 @@ function renderHeader() {
       <div class="logo">焦點<span>日報</span></div>
       <div class="header-actions">
         <button class="header-btn" onclick="toggleTheme()" title="切換主題">${state.theme==='dark'?'☀':'☾'}</button>
+        <button class="header-btn" onclick="fetchAllNews(true)" title="重新整理" style="${isFetchingNews?'animation:spin .8s linear infinite':''}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></button>
         <button class="header-btn" title="搜尋">⌕</button>
       </div>
     </div>
@@ -811,11 +1033,23 @@ function renderHeader() {
 }
 
 function renderFeed() {
-  const articles = NEWS.filter(n=>n.cat===state.cat);
+  const allArticles = NEWS.filter(n=>n.cat===state.cat);
+  const totalPages = Math.max(1, Math.ceil(allArticles.length / PAGE_SIZE));
+  if (state.page > totalPages) state.page = totalPages;
+  const start = (state.page - 1) * PAGE_SIZE;
+  const articles = allArticles.slice(start, start + PAGE_SIZE);
   const interval = getAdInterval();
   let html = '';
+  if (allArticles.length === 0) {
+    html = `<div style="text-align:center;padding:60px 20px;color:var(--text3)">
+      <div style="font-size:40px;margin-bottom:12px">📡</div>
+      <div style="font-size:15px">正在載入${state.cat}新聞...</div>
+      <div style="font-size:13px;margin-top:8px">請點擊重新整理按鈕</div>
+    </div>`;
+    return html;
+  }
   articles.forEach((a,i)=>{
-    const isHero = i===0;
+    const isHero = i===0 && state.page===1;
     html += `<div class="news-card ${isHero?'news-card-hero':''}" style="animation-delay:${i*0.06}s" onclick="openArticle(${NEWS.indexOf(a)})">
       <div class="thumb" style="background:var(--bg2);background-image:url('${a.img}');background-size:cover;background-position:center;"></div>
       <div class="info">
@@ -823,11 +1057,25 @@ function renderFeed() {
         <div class="meta"><span class="source">${a.src}</span><span>${a.time}</span></div>
       </div>
     </div>`;
-    // Insert ad unit after every Nth card
     if((i+1)%interval===0) {
       html += renderInFeedAd(i);
     }
   });
+  // 分頁導航
+  if (totalPages > 1) {
+    html += `<div class="pagination">`;
+    if (state.page > 1) {
+      html += `<button class="page-btn" onclick="goPage(${state.page-1})">‹ 上一頁</button>`;
+    }
+    for (let p = 1; p <= totalPages; p++) {
+      html += `<button class="page-btn ${p===state.page?'active':''}" onclick="goPage(${p})">${p}</button>`;
+    }
+    if (state.page < totalPages) {
+      html += `<button class="page-btn" onclick="goPage(${state.page+1})">下一頁 ›</button>`;
+    }
+    html += `<div class="page-info">${allArticles.length} 篇新聞 · 第 ${state.page}/${totalPages} 頁</div>`;
+    html += `</div>`;
+  }
   return html;
 }
 
@@ -837,14 +1085,13 @@ function renderInFeedAd(idx) {
       <!-- ====================================
            AdSense 動態內原生廣告
            替換 data-ad-client 為你的發布商 ID
-           替換 data-ad-slot 為你的廣告單元 ID
            ==================================== -->
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-format="fluid"
            data-ad-layout-key="-6t+ed+2i-1n-4w"
            data-ad-client="${state.pubId}"
-           data-ad-slot="IN_FEED_SLOT_${idx}"></ins>
+           data-ad-slot="2963123186"></ins>
       <span>動態內廣告單元 · In-feed Ad</span>
     </div>
   </div>`;
@@ -860,7 +1107,7 @@ function renderAdBanner() {
     <ins class="adsbygoogle"
          style="display:block;height:50px"
          data-ad-client="${state.pubId}"
-         data-ad-slot="BANNER_SLOT_ID"
+         data-ad-slot="2963123186"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <span style="font-size:10px;color:var(--text3)">橫幅廣告 · Banner Ad</span>
@@ -983,7 +1230,8 @@ function renderTabBar() {
 
 // === ACTIONS ===
 function switchTab(i) { state.tab=i; render(); }
-function switchCat(c) { state.cat=c; render(); }
+function switchCat(c) { state.cat=c; state.page=1; render(); }
+function goPage(p) { state.page=p; render(); const feed=$('#feed'); if(feed) feed.scrollTop=0; }
 function toggleTheme() {
   state.theme = state.theme==='dark'?'light':'dark';
   render();
@@ -1007,20 +1255,22 @@ function clearCache() {
 // === ARTICLE ===
 function openArticle(idx) {
   state.currentArticle = NEWS[idx];
+  const a = state.currentArticle;
   const av = $('#articleView');
   const ab = $('#articleBody');
   // Show interstitial ad first
   showInterstitial(()=>{
+    const hasLink = a.link ? `<a href="${a.link}" target="_blank" rel="noopener" style="display:inline-block;margin:16px 0;padding:10px 20px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-size:14px;">閱讀原文 ↗</a>` : '';
     ab.innerHTML = `
-      <h1>${state.currentArticle.title}</h1>
+      <h1>${a.title}</h1>
       <div class="article-meta">
-        <span class="asrc">${state.currentArticle.src}</span>
-        <span>${state.currentArticle.time}</span>
-        <span>${state.currentArticle.cat}</span>
+        <span class="asrc">${a.src}</span>
+        <span>${a.time}</span>
+        <span>${a.cat}</span>
       </div>
-      <div class="article-img" style="background-image:url('${state.currentArticle.img}');background-size:cover;background-position:center;"></div>
-      <p>${state.currentArticle.body}</p>
-      <p>根據業內人士透露，相關政策的後續影響仍在持續評估中。市場觀察人士普遍認為，這一發展將對相關產業鏈產生深遠影響，投資人應密切關注後續動態。</p>
+      <div class="article-img" style="background-image:url('${a.img}');background-size:cover;background-position:center;"></div>
+      <p>${a.body}</p>
+      ${hasLink}
       <div class="article-ad ad-unit">
         <div class="ad-placeholder">
           <!-- AdSense 文章內廣告 -->
@@ -1029,11 +1279,10 @@ function openArticle(idx) {
                data-ad-layout="in-article"
                data-ad-format="fluid"
                data-ad-client="${state.pubId}"
-               data-ad-slot="IN_ARTICLE_SLOT_ID"></ins>
+               data-ad-slot="2963123186"></ins>
           <span>文章內廣告 · In-article Ad</span>
         </div>
       </div>
-      <p>分析師指出，短期內市場可能出現較大幅度的波動，但長期來看，基本面的改善趨勢不會改變。建議投資人保持理性，避免追高殺低，把握結構性機會。</p>
       <p>本報將持續追蹤相關發展，為讀者提供最即時、最深入的報導與分析。</p>
     `;
     av.classList.add('open');
@@ -1092,7 +1341,7 @@ function bindEvents() {
       const hint=$('#ptrHint');
       if(hint) hint.classList.remove('visible');
       pulling=false;
-      showToast('內容已更新');
+      fetchAllNews(true);
     }
   },{passive:true});
   // Back button for article
@@ -1100,7 +1349,15 @@ function bindEvents() {
 }
 
 // === INIT ===
+// 先嘗試載入快取，再即時抓取更新
+if (!loadCachedNews()) {
+  NEWS = [...FALLBACK_NEWS]; // 離線時使用預設資料
+}
 render();
+// 背景抓取即時新聞
+fetchAllNews(false);
+// 每 15 分鐘自動更新
+setInterval(() => fetchAllNews(false), 900000);
 
 // === SERVICE WORKER REGISTRATION ===
 if('serviceWorker' in navigator) {

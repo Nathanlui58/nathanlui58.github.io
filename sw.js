@@ -14,8 +14,8 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Don't cache ad requests
-  if (e.request.url.includes('googlesyndication') || e.request.url.includes('doubleclick')) return;
+  // Don't cache ad requests or RSS proxy requests
+  if (e.request.url.includes('googlesyndication') || e.request.url.includes('doubleclick') || e.request.url.includes('rss2json') || e.request.url.includes('allorigins') || e.request.url.includes('news.google.com') || e.request.url.includes('rthk.hk')) return;
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
       if (resp.status === 200 && e.request.method === 'GET') {
