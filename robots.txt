@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.infinityclothes.dpdns.org/sitemap.xml
+Sitemap: https://infinityclothes.dpdns.org/sitemap.xml
