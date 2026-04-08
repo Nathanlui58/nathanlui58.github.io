@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#ffffff">
+<title>焦點日報 — 智慧新聞</title>
+<link rel="manifest" href="manifest.json">
+
+<!-- ============================================================
+     Google AdSense — 請將 ca-pub-1692670290595476 替換為你的 AdSense 發布商 ID
+     ============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1692670290595476" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #FAFAF8;
+  --bg2: #F0EFEB;
+  --bg3: #E8E6E1;
+  --card: #FFFFFF;
+  --text: #1A1A18;
+  --text2: #6B6963;
+  --text3: #9E9A92;
+  --accent: #C84B31;
+  --accent2: #E8714A;
+  --accent-soft: rgba(200,75,49,0.08);
+  --border: rgba(0,0,0,0.06);
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --tab-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --serif: 'Noto Serif TC', serif;
+  --sans: 'Noto Sans TC', -apple-system, sans-serif;
+  --ad-bg: #F5F3EE;
+  --ad-border: #E0DDD6;
+  --green: #2D9F6F;
+  --chart1: #C84B31;
+  --chart2: #E8A44A;
+  --chart3: #2D9F6F;
+}
+
+[data-theme="dark"] {
+  --bg: #121210;
+  --bg2: #1C1C19;
+  --bg3: #262622;
+  --card: #1E1E1B;
+  --text: #EDEAE4;
+  --text2: #9E9A92;
+  --text3: #6B6963;
+  --accent: #E8714A;
+  --accent2: #F09070;
+  --accent-soft: rgba(232,113,74,0.1);
+  --border: rgba(255,255,255,0.06);
+  --shadow: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.3);
+  --ad-bg: #1A1A17;
+  --ad-border: #2A2A26;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* === Pull to Refresh === */
+.ptr-hint {
+  text-align:center;
+  padding:10px 0 4px;
+  font-size:12px;
+  color:var(--text3);
+  opacity:0;
+  transform:translateY(-20px);
+  transition: all .3s;
+}
+.ptr-hint.visible { opacity:1; transform:translateY(0); }
+
+/* === Header === */
+.header {
+  position:sticky; top:0; z-index:100;
+  background: var(--bg);
+  padding: 12px 20px 0;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.header-top {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-bottom:12px;
+}
+.logo {
+  font-family: var(--serif);
+  font-weight:900;
+  font-size:22px;
+  color: var(--text);
+  letter-spacing:-0.5px;
+}
+.logo span { color: var(--accent); }
+.header-actions { display:flex; gap:8px; align-items:center; }
+.header-btn {
+  width:36px; height:36px;
+  border-radius:50%;
+  border:none;
+  background:var(--bg2);
+  color:var(--text2);
+  font-size:16px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition: all .2s;
+}
+.header-btn:active { transform:scale(0.92); background:var(--bg3); }
+
+/* === Category Tabs === */
+.cat-tabs {
+  display:flex;
+  gap:4px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding-bottom:0;
+  -webkit-overflow-scrolling:touch;
+}
+.cat-tabs::-webkit-scrollbar { display:none; }
+.cat-tab {
+  flex-shrink:0;
+  padding:8px 16px;
+  border:none;
+  background:transparent;
+  color:var(--text3);
+  font-size:14px;
+  font-weight:500;
+  font-family:var(--sans);
+  cursor:pointer;
+  position:relative;
+  transition: color .2s;
+  border-bottom:2.5px solid transparent;
+  margin-bottom:-1px;
+}
+.cat-tab.active {
+  color:var(--accent);
+  border-bottom-color:var(--accent);
+  font-weight:700;
+}
+.cat-tab:active { opacity:0.7; }
+
+/* === News Feed === */
+.feed {
+  padding: 12px 16px calc(var(--tab-h) + var(--safe-b) + 80px);
+  min-height: 100dvh;
+}
+.news-card {
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+  display:flex;
+  gap:14px;
+  cursor:pointer;
+  transition: transform .2s, box-shadow .2s;
+  animation: cardIn .5s ease both;
+  border:1px solid var(--border);
+}
+.news-card:active { transform:scale(0.98); }
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.news-card .thumb {
+  width:100px; height:76px;
+  border-radius:var(--radius-sm);
+  object-fit:cover;
+  flex-shrink:0;
+  background:var(--bg2);
+}
+.news-card .info { flex:1; display:flex; flex-direction:column; justify-content:space-between; min-width:0; }
+.news-card .title {
+  font-size:15px;
+  font-weight:700;
+  line-height:1.45;
+  color:var(--text);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  font-family:var(--serif);
+  letter-spacing:0.3px;
+}
+.news-card .meta {
+  display:flex;
+  gap:8px;
+  font-size:11.5px;
+  color:var(--text3);
+  align-items:center;
+  margin-top:6px;
+}
+.news-card .source {
+  color:var(--accent);
+  font-weight:500;
+}
+.news-card-hero {
+  flex-direction:column;
+}
+.news-card-hero .thumb {
+  width:100%; height:180px;
+}
+.news-card-hero .title {
+  font-size:18px;
+  -webkit-line-clamp:3;
+}
+
+/* === Ad Units === */
+.ad-unit {
+  background:var(--ad-bg);
+  border:1px dashed var(--ad-border);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+  text-align:center;
+  position:relative;
+}
+.ad-unit::before {
+  content:'廣告';
+  position:absolute;
+  top:6px; right:10px;
+  font-size:10px;
+  color:var(--text3);
+  background:var(--bg3);
+  padding:2px 6px;
+  border-radius:4px;
+}
+.ad-unit .ad-placeholder {
+  min-height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text3);
+  font-size:12px;
+}
+.ad-banner-bottom {
+  position:fixed;
+  bottom:calc(var(--tab-h) + var(--safe-b));
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:480px;
+  z-index:90;
+  background:var(--ad-bg);
+  border-top:1px solid var(--ad-border);
+  padding:8px 16px;
+  text-align:center;
+}
+.ad-banner-bottom::before {
+  content:'廣告';
+  position:absolute;
+  top:4px; right:12px;
+  font-size:9px;
+  color:var(--text3);
+}
+
+/* === Interstitial Ad Overlay === */
+.interstitial {
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition: opacity .3s;
+}
+.interstitial.show { opacity:1; pointer-events:auto; }
+.interstitial-card {
+  background:var(--card);
+  border-radius:20px;
+  width:85%;max-width:360px;
+  padding:24px;
+  text-align:center;
+  position:relative;
+}
+.interstitial-close {
+  position:absolute;top:12px;right:14px;
+  width:28px;height:28px;border-radius:50%;
+  border:none;background:var(--bg2);color:var(--text2);
+  font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.interstitial-timer {
+  font-size:11px;color:var(--text3);margin-top:12px;
+}
+
+/* === Article Detail === */
+.article-view {
+  position:fixed;inset:0;z-index:500;
+  background:var(--bg);
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.32,.72,0,1);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.article-view.open { transform:translateX(0); }
+.article-header {
+  position:sticky;top:0;z-index:10;
+  background:var(--bg);
+  display:flex;align-items:center;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+}
+.back-btn {
+  border:none;background:none;
+  color:var(--accent);font-size:15px;
+  cursor:pointer;font-family:var(--sans);
+  font-weight:500;
+  display:flex;align-items:center;gap:4px;
+}
+.article-body {
+  padding:20px 20px 100px;
+}
+.article-body h1 {
+  font-family:var(--serif);
+  font-size:24px;
+  font-weight:900;
+  line-height:1.4;
+  margin-bottom:12px;
+  letter-spacing:0.5px;
+}
+.article-body .article-meta {
+  display:flex;gap:12px;align-items:center;
+  font-size:12px;color:var(--text3);
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:20px;
+}
+.article-body .article-meta .asrc { color:var(--accent);font-weight:600; }
+.article-body .article-img {
+  width:100%;border-radius:var(--radius);
+  height:200px;object-fit:cover;
+  background:var(--bg2);
+  margin-bottom:20px;
+}
+.article-body p {
+  font-size:16px;
+  line-height:1.85;
+  color:var(--text2);
+  margin-bottom:16px;
+  text-align:justify;
+}
+.article-ad {
+  margin:24px 0;
+}
+
+/* === Bottom Tab Bar === */
+.tab-bar {
+  position:fixed;
+  bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:100%;max-width:480px;
+  height:calc(var(--tab-h) + var(--safe-b));
+  padding-bottom:var(--safe-b);
+  background:var(--card);
+  border-top:1px solid var(--border);
+  display:flex;
+  z-index:200;
+  backdrop-filter:blur(20px);
+}
+.tab-item {
+  flex:1;
+  border:none;background:none;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;
+  color:var(--text3);
+  font-size:10px;
+  font-family:var(--sans);
+  cursor:pointer;
+  transition:color .2s;
+  padding-top:6px;
+}
+.tab-item.active { color:var(--accent); }
+.tab-item svg { width:22px;height:22px; }
+.tab-item:active { opacity:0.6; }
+
+/* === Pages (Earnings, Settings) === */
+.page {
+  display:none;
+  padding:0 16px calc(var(--tab-h) + var(--safe-b) + 80px);
+  animation: pageIn .35s ease;
+}
+.page.active { display:block; }
+@keyframes pageIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.page-title {
+  font-family:var(--serif);
+  font-size:26px;
+  font-weight:900;
+  padding:20px 0 16px;
+  letter-spacing:0.3px;
+}
+
+/* === Earnings Page === */
+.earnings-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:20px;
+}
+.earn-card {
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px 12px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.earn-card .label {
+  font-size:11px;color:var(--text3);margin-bottom:6px;
+}
+.earn-card .value {
+  font-size:20px;font-weight:700;color:var(--text);
+  font-family:var(--serif);
+}
+.earn-card .value.green { color:var(--green); }
+.stats-row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:20px;
+}
+.stat-card {
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.stat-card .slabel { font-size:12px;color:var(--text3);margin-bottom:4px; }
+.stat-card .sval { font-size:18px;font-weight:700; }
+.chart-container {
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:20px 16px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+.chart-container h3 {
+  font-size:14px;font-weight:700;margin-bottom:16px;
+  font-family:var(--serif);
+}
+.chart-bars {
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:140px;
+  padding-top:10px;
+}
+.chart-bar-wrap {
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  height:100%;justify-content:flex-end;
+}
+.chart-bar {
+  width:100%;
+  border-radius:6px 6px 0 0;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  transition: height .6s cubic-bezier(.32,.72,0,1);
+  min-height:4px;
+}
+.chart-label { font-size:9px;color:var(--text3); }
+.chart-val { font-size:9px;color:var(--text2);font-weight:600; }
+
+/* === Settings === */
+.setting-group {
+  background:var(--card);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:16px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.setting-group-title {
+  font-size:12px;
+  color:var(--text3);
+  padding:12px 16px 6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.setting-item {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:14.5px;
+}
+.setting-item:last-child { border-bottom:none; }
+.setting-item label { color:var(--text); font-weight:500; }
+.setting-item input[type="text"] {
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:8px 12px;
+  font-size:13px;
+  background:var(--bg2);
+  color:var(--text);
+  width:180px;
+  text-align:right;
+  font-family:var(--sans);
+  outline:none;
+}
+.setting-item input[type="text"]:focus {
+  border-color:var(--accent);
+}
+
+/* Toggle Switch */
+.toggle {
+  width:48px;height:28px;
+  border-radius:14px;
+  background:var(--bg3);
+  position:relative;
+  cursor:pointer;
+  transition:background .3s;
+  border:none;
+}
+.toggle.on { background:var(--accent); }
+.toggle::after {
+  content:'';
+  position:absolute;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:#fff;
+  top:3px;left:3px;
+  transition:transform .3s cubic-bezier(.32,.72,0,1);
+  box-shadow:0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle.on::after { transform:translateX(20px); }
+
+/* Segmented Control */
+.seg-ctrl {
+  display:flex;
+  background:var(--bg2);
+  border-radius:var(--radius-sm);
+  padding:2px;
+}
+.seg-btn {
+  flex:1;
+  padding:6px 12px;
+  border:none;
+  background:none;
+  border-radius:6px;
+  font-size:12.5px;
+  font-family:var(--sans);
+  color:var(--text3);
+  cursor:pointer;
+  transition:all .2s;
+  font-weight:500;
+}
+.seg-btn.active {
+  background:var(--card);
+  color:var(--text);
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
+}
+
+.setting-action {
+  display:block;
+  width:100%;
+  padding:14px 16px;
+  border:none;
+  background:none;
+  color:var(--accent);
+  font-size:14.5px;
+  font-weight:600;
+  font-family:var(--sans);
+  cursor:pointer;
+  text-align:center;
+}
+.setting-action:active { opacity:0.6; }
+
+.about-text {
+  text-align:center;
+  padding:20px;
+  font-size:12px;
+  color:var(--text3);
+  line-height:1.7;
+}
+
+/* === Categories Page === */
+.cat-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  padding-top:4px;
+}
+.cat-card {
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:24px 16px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:transform .2s;
+}
+.cat-card:active { transform:scale(0.96); }
+.cat-card .cat-icon { font-size:32px;margin-bottom:8px; }
+.cat-card .cat-name { font-size:14px;font-weight:700;font-family:var(--serif); }
+.cat-card .cat-count { font-size:11px;color:var(--text3);margin-top:4px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:0; }
+
+/* Transition delays for stagger */
+.news-card:nth-child(1) { animation-delay:.05s }
+.news-card:nth-child(2) { animation-delay:.1s }
+.news-card:nth-child(3) { animation-delay:.15s }
+.news-card:nth-child(4) { animation-delay:.2s }
+.news-card:nth-child(5) { animation-delay:.25s }
+.news-card:nth-child(6) { animation-delay:.3s }
+.news-card:nth-child(7) { animation-delay:.35s }
+.news-card:nth-child(8) { animation-delay:.4s }
+
+/* Toast */
+.toast {
+  position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:var(--text);color:var(--bg);
+  padding:10px 20px;border-radius:20px;
+  font-size:13px;z-index:3000;
+  opacity:0;transition:all .3s;pointer-events:none;
+}
+.toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// =============================================
+// 焦點日報 — PWA News App with AdSense
+// =============================================
+
+// === NEWS DATA ===
+const NEWS = [
+  {cat:'頭條',title:'台積電宣布三奈米製程量產突破，全球半導體格局將重塑',src:'科技新報',time:'22分鐘前',
+   img:'https://picsum.photos/seed/tsmc/400/300',
+   body:'台積電今日在法說會上宣布，其三奈米先進製程良率已突破90%大關，遠超市場預期。這一突破性進展意味著全球最先進的晶片製造技術正式進入成熟量產階段。分析師指出，此舉將進一步鞏固台積電在全球半導體產業鏈中的領導地位，同時對英特爾和三星的追趕策略構成重大壓力。業界預估，新製程將率先應用於蘋果下一代處理器及輝達的AI加速晶片。'},
+  {cat:'頭條',title:'央行意外降息一碼，房市與股市迎來新一輪資金潮',src:'經濟日報',time:'1小時前',
+   img:'https://picsum.photos/seed/bank/400/300',
+   body:'中央銀行今日召開理監事會議，決議調降政策利率一碼（0.25個百分點），此舉出乎市場預料。央行總裁表示，全球經濟放緩風險升高，降息旨在提前因應外部衝擊。市場反應迅速，加權股價指數午盤大漲逾300點，房地產類股更是全面漲停。房仲業者預估，降息效應將在未來三個月內帶動房市交易量回升至少兩成。'},
+  {cat:'科技',title:'蘋果發布全新Vision Pro 2，售價大幅調降至千美元以下',src:'蘋果新聞',time:'3小時前',
+   img:'https://picsum.photos/seed/apple/400/300',
+   body:'蘋果公司在春季發表會上正式推出第二代混合實境頭戴裝置Vision Pro 2，最引人注目的是其起售價降至999美元，較初代產品降幅超過七成。新裝置採用M4晶片，重量減輕40%，續航力提升至4小時。蘋果CEO庫克表示，空間運算是未來十年的重要趨勢，降價策略旨在加速市場普及。首批上市地區包含台灣在內的十五個國家。'},
+  {cat:'科技',title:'OpenAI推出GPT-5，多模態能力全面超越人類基準',src:'TechCrunch',time:'5小時前',
+   img:'https://picsum.photos/seed/openai/400/300',
+   body:'OpenAI正式發布其最新大型語言模型GPT-5，在推理、數學、程式撰寫和多語言理解等多項基準測試中首次全面超越人類專家水平。新模型支援即時影片分析和長達百萬token的上下文窗口，並且推理成本較GPT-4降低十倍。此消息帶動AI相關概念股全面大漲。'},
+  {cat:'科技',title:'台灣新創推出全球首款石墨烯電池手機，充電僅需15分鐘',src:'數位時代',time:'6小時前',
+   img:'https://picsum.photos/seed/battery/400/300',
+   body:'總部位於新竹的新創公司「能源芯」今日發布全球首款搭載石墨烯電池的智慧型手機原型機。該電池容量達5000mAh，從零充至滿電僅需15分鐘，且經過3000次充放電循環後容量衰減不到5%。公司表示已與多家國際手機品牌洽談技術授權，預計明年上半年可在市售機種中看到此技術。'},
+  {cat:'財經',title:'比特幣突破十五萬美元大關，機構資金持續湧入現貨ETF',src:'CoinDesk中文',time:'45分鐘前',
+   img:'https://picsum.photos/seed/btc/400/300',
+   body:'比特幣價格今日突破15萬美元整數關口，創下歷史新高。鏈上數據顯示，美國現貨比特幣ETF連續第四週錄得淨流入，單週流入金額達42億美元。分析師指出，聯準會降息預期升溫加上機構配置需求持續擴大，為本輪漲勢提供了堅實支撐。鏈上持有超過1000枚比特幣的鯨魚地址數量創下年內新高。'},
+  {cat:'財經',title:'外資連續買超台股二十個交易日，累計金額破千億',src:'工商時報',time:'2小時前',
+   img:'https://picsum.photos/seed/stock/400/300',
+   body:'外資法人持續看好台灣科技股，已連續二十個交易日買超台股，累計買超金額突破新台幣一千億元。法人分析，AI伺服器供應鏈的強勁需求是吸引外資回流的主因，其中台積電、鴻海及廣達為主要買超標的。市場預期，在第二季財報旺季來臨前，外資買盤動能仍將維持強勁。'},
+  {cat:'財經',title:'日圓兌美元跌破160關口，日本央行面臨干預壓力',src:'路透社',time:'4小時前',
+   img:'https://picsum.photos/seed/yen/400/300',
+   body:'日圓匯率持續走弱，今日盤中兌美元匯率跌破160大關，創下近三十年來新低。日本央行面臨越來越大的市場干預壓力。日本財務大臣發表聲明，強調將對匯率過度波動採取「果斷行動」。分析師認為，美日利差持續擴大是日圓走貶的根本原因。'},
+  {cat:'體育',title:'戴資穎宣布復出參加巴黎奧運，目標衝擊生涯第二面金牌',src:'運動視界',time:'1小時前',
+   img:'https://picsum.photos/seed/badm/400/300',
+   body:'台灣羽球天后戴資穎今日在個人社群媒體上正式宣布復出，將代表中華隊參加即將到來的奧運會。她表示，經過一年的休養和訓練調整，身體狀態已恢復到巔峰水平。教練團透露，戴資穎近期在內部對抗賽中表現出色，有信心在奧運賽場上爭取佳績。此消息一出，立即引爆社群媒體討論。'},
+  {cat:'體育',title:'中職聯盟宣布第六隊加入，台灣職棒邁入新紀元',src:'ETtoday體育',time:'3小時前',
+   img:'https://picsum.photos/seed/baseball/400/300',
+   body:'中華職棒大聯盟今日正式宣布，來自高雄的企業財團獲准成立第六支球隊，預計明年球季起參與聯賽。這是中職自成立以來第三次擴編，也是睽違多年後再度迎來新球團。聯盟會長表示，第六隊的加入將有效解決賽程密度不足的問題，也將為南部球迷帶來主場球隊的歸屬感。'},
+  {cat:'體育',title:'NBA季後賽：湖人隊逆轉勝晉級，詹姆斯砍下40分三雙',src:'NBA台灣',time:'6小時前',
+   img:'https://picsum.photos/seed/nba/400/300',
+   body:'洛杉磯湖人隊在NBA季後賽首輪第七戰中上演驚天逆轉，在第四節落後15分的情況下完成反超，最終以118比112擊敗對手晉級第二輪。詹姆斯全場攻下40分、12籃板、11助攻的大三雙數據，展現出無與倫比的季後賽統治力。'},
+  {cat:'娛樂',title:'五月天宣布亞洲巡迴演唱會，台北小巨蛋連開十場',src:'KKBOX',time:'30分鐘前',
+   img:'https://picsum.photos/seed/concert/400/300',
+   body:'天團五月天今日宣布全新「再一次勇敢」亞洲巡迴演唱會計劃，首站將於台北小巨蛋連續開唱十場。門票將於下週三中午12點開放搶購，主辦單位已啟用實名制購票系統以防止黃牛。五月天表示，全新的舞台設計將採用360度環形舞台，讓每個座位都擁有最佳視角。'},
+  {cat:'娛樂',title:'金馬獎入圍名單揭曉，新銳導演作品橫掃七項提名',src:'娛樂星聞',time:'2小時前',
+   img:'https://picsum.photos/seed/film/400/300',
+   body:'第63屆金馬獎入圍名單今日揭曉，年僅28歲的新銳導演林書宇執導的《天光》以最佳影片、最佳導演等七項提名領跑。這部以白色恐怖時期為背景的歷史劇情片在今年坎城影展首映時即獲得長達八分鐘的起立鼓掌。頒獎典禮將於十一月底盛大舉行。'},
+  {cat:'娛樂',title:'Netflix公布2026年華語原創內容計劃，投資金額倍增',src:'影視產業',time:'5小時前',
+   img:'https://picsum.photos/seed/netflix/400/300',
+   body:'Netflix今日在台北舉行年度華語內容發布會，宣布2026年華語原創內容投資金額將較去年倍增，預計推出超過二十部原創劇集和電影。其中包括與金獎導演侯孝賢監製團隊合作的歷史大劇，以及多部探討當代社會議題的都市劇。Netflix亞太區副總裁表示，台灣已成為華語內容創作的重要基地。'},
+  {cat:'頭條',title:'全球碳交易市場正式啟動，台灣碳權交易所同步開市',src:'環境資訊',time:'4小時前',
+   img:'https://picsum.photos/seed/carbon/400/300',
+   body:'聯合國支持的全球統一碳交易市場今日正式啟動運作，台灣碳權交易所也同步開始交易。首日碳權成交均價為每噸32美元，交易量超出預期三倍。環境部長表示，碳交易機制的建立是台灣邁向2050淨零排放目標的重要里程碑。首批參與交易的企業包含台積電、中鋼等大型排碳企業。'},
+  {cat:'科技',title:'聯發科發布天璣9400旗艦晶片，AI效能提升三倍',src:'電子時報',time:'7小時前',
+   img:'https://picsum.photos/seed/mtk/400/300',
+   body:'聯發科技今日正式發布新一代旗艦行動處理器天璣9400，採用台積電三奈米製程，整合全新APU（AI處理單元），AI運算效能較上一代提升三倍。新晶片支援端側大型語言模型運行，可在手機本地端執行70億參數的AI模型。聯發科表示，首批搭載天璣9400的旗艦手機將於下季度上市。'},
+];
+
+const CATEGORIES = ['頭條','科技','財經','體育','娛樂'];
+const CAT_ICONS = {'頭條':'🔥','科技':'💻','財經':'📈','體育':'⚽','娛樂':'🎬'};
+
+// === STATE ===
+let state = {
+  tab: 0, // 0=home,1=categories,2=earnings,3=settings
+  cat: '頭條',
+  theme: localStorage.getItem('theme') || 'light',
+  pubId: localStorage.getItem('pubId') || 'ca-pub-1692670290595476',
+  adDensity: localStorage.getItem('adDensity') || 'medium',
+  articleOpen: false,
+  currentArticle: null,
+};
+
+// === HELPERS ===
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.querySelector('meta[name="theme-color"]').content = state.theme==='dark'?'#121210':'#ffffff';
+  localStorage.setItem('theme', state.theme);
+}
+function showToast(msg) {
+  const t = $('.toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+function getAdInterval() {
+  return state.adDensity==='low'?5:state.adDensity==='high'?2:3;
+}
+
+// === RENDER ===
+function render() {
+  applyTheme();
+  const app = $('#app');
+  app.innerHTML = `
+    <div class="toast"></div>
+    <div class="interstitial" id="interstitial">
+      <div class="interstitial-card">
+        <button class="interstitial-close" onclick="closeInterstitial()">✕</button>
+        <div class="ad-unit" style="border:none;background:transparent;margin:0">
+          <div class="ad-placeholder" style="min-height:200px;">
+            <!-- ====================================
+                 AdSense 插頁式廣告單元
+                 替換 data-ad-client 為你的發布商 ID
+                 替換 data-ad-slot 為你的廣告單元 ID
+                 ==================================== -->
+            <ins class="adsbygoogle"
+                 style="display:block;width:100%;height:200px"
+                 data-ad-client="${state.pubId}"
+                 data-ad-slot="INTERSTITIAL_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <span style="font-size:11px;color:var(--text3)">插頁式廣告單元<br>AdSense Interstitial</span>
+          </div>
+        </div>
+        <div class="interstitial-timer" id="interTimer">廣告將在 <strong>3</strong> 秒後關閉</div>
+      </div>
+    </div>
+    <div class="article-view" id="articleView">
+      <div class="article-header">
+        <button class="back-btn" onclick="closeArticle()">‹ 返回</button>
+      </div>
+      <div class="article-body" id="articleBody"></div>
+    </div>
+    ${renderHeader()}
+    <div class="page ${state.tab===0?'active':''}" id="pageHome">
+      <div class="ptr-hint" id="ptrHint">↓ 下拉重新整理</div>
+      <div class="feed" id="feed">${renderFeed()}</div>
+    </div>
+    <div class="page ${state.tab===1?'active':''}" id="pageCat">
+      <div class="page-title">分類瀏覽</div>
+      <div class="cat-grid">${renderCatGrid()}</div>
+    </div>
+    <div class="page ${state.tab===2?'active':''}" id="pageEarn">
+      ${renderEarnings()}
+    </div>
+    <div class="page ${state.tab===3?'active':''}" id="pageSettings">
+      ${renderSettings()}
+    </div>
+    ${renderAdBanner()}
+    ${renderTabBar()}
+  `;
+  bindEvents();
+}
+
+function renderHeader() {
+  if(state.tab!==0) return '';
+  return `<div class="header">
+    <div class="header-top">
+      <div class="logo">焦點<span>日報</span></div>
+      <div class="header-actions">
+        <button class="header-btn" onclick="toggleTheme()" title="切換主題">${state.theme==='dark'?'☀':'☾'}</button>
+        <button class="header-btn" title="搜尋">⌕</button>
+      </div>
+    </div>
+    <div class="cat-tabs">
+      ${CATEGORIES.map(c=>`<button class="cat-tab ${state.cat===c?'active':''}" onclick="switchCat('${c}')">${c}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderFeed() {
+  const articles = NEWS.filter(n=>n.cat===state.cat);
+  const interval = getAdInterval();
+  let html = '';
+  articles.forEach((a,i)=>{
+    const isHero = i===0;
+    html += `<div class="news-card ${isHero?'news-card-hero':''}" style="animation-delay:${i*0.06}s" onclick="openArticle(${NEWS.indexOf(a)})">
+      <div class="thumb" style="background:var(--bg2);background-image:url('${a.img}');background-size:cover;background-position:center;"></div>
+      <div class="info">
+        <div class="title">${a.title}</div>
+        <div class="meta"><span class="source">${a.src}</span><span>${a.time}</span></div>
+      </div>
+    </div>`;
+    // Insert ad unit after every Nth card
+    if((i+1)%interval===0) {
+      html += renderInFeedAd(i);
+    }
+  });
+  return html;
+}
+
+function renderInFeedAd(idx) {
+  return `<div class="ad-unit">
+    <div class="ad-placeholder">
+      <!-- ====================================
+           AdSense 動態內原生廣告
+           替換 data-ad-client 為你的發布商 ID
+           替換 data-ad-slot 為你的廣告單元 ID
+           ==================================== -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-format="fluid"
+           data-ad-layout-key="-6t+ed+2i-1n-4w"
+           data-ad-client="${state.pubId}"
+           data-ad-slot="IN_FEED_SLOT_${idx}"></ins>
+      <span>動態內廣告單元 · In-feed Ad</span>
+    </div>
+  </div>`;
+}
+
+function renderAdBanner() {
+  return `<div class="ad-banner-bottom">
+    <!-- ====================================
+         AdSense 底部橫幅自適應廣告
+         替換 data-ad-client 為你的發布商 ID
+         替換 data-ad-slot 為你的廣告單元 ID
+         ==================================== -->
+    <ins class="adsbygoogle"
+         style="display:block;height:50px"
+         data-ad-client="${state.pubId}"
+         data-ad-slot="BANNER_SLOT_ID"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <span style="font-size:10px;color:var(--text3)">橫幅廣告 · Banner Ad</span>
+  </div>`;
+}
+
+function renderCatGrid() {
+  return CATEGORIES.map(c=>{
+    const count = NEWS.filter(n=>n.cat===c).length;
+    return `<div class="cat-card" onclick="switchCat('${c}');switchTab(0)">
+      <div class="cat-icon">${CAT_ICONS[c]}</div>
+      <div class="cat-name">${c}</div>
+      <div class="cat-count">${count} 篇文章</div>
+    </div>`;
+  }).join('');
+}
+
+function renderEarnings() {
+  const days = ['一','二','三','四','五','六','日'];
+  const vals = [2.4,3.1,1.8,4.2,3.7,5.1,4.8];
+  const maxV = Math.max(...vals);
+  return `
+    <div class="page-title">收益總覽</div>
+    <div class="earnings-cards">
+      <div class="earn-card"><div class="label">今日預估</div><div class="value green">$4.80</div></div>
+      <div class="earn-card"><div class="label">本週累計</div><div class="value green">$25.10</div></div>
+      <div class="earn-card"><div class="label">本月累計</div><div class="value green">$142.60</div></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="slabel">廣告曝光次數</div><div class="sval">12,847</div></div>
+      <div class="stat-card"><div class="slabel">點擊率 (CTR)</div><div class="sval" style="color:var(--accent)">2.34%</div></div>
+      <div class="stat-card"><div class="slabel">每千次曝光收益</div><div class="sval">$11.10</div></div>
+      <div class="stat-card"><div class="slabel">頁面瀏覽量</div><div class="sval">5,483</div></div>
+    </div>
+    <div class="chart-container">
+      <h3>近七日收益趨勢（美元）</h3>
+      <div class="chart-bars">
+        ${vals.map((v,i)=>`<div class="chart-bar-wrap">
+          <div class="chart-val">$${v.toFixed(1)}</div>
+          <div class="chart-bar" style="height:${(v/maxV)*100}%"></div>
+          <div class="chart-label">週${days[i]}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="chart-container">
+      <h3>廣告類型收益佔比</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <span style="width:12px;height:12px;border-radius:3px;background:var(--chart1);display:inline-block"></span>
+          動態內廣告 58%
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <span style="width:12px;height:12px;border-radius:3px;background:var(--chart2);display:inline-block"></span>
+          橫幅廣告 27%
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <span style="width:12px;height:12px;border-radius:3px;background:var(--chart3);display:inline-block"></span>
+          插頁式廣告 15%
+        </div>
+      </div>
+      <div style="display:flex;height:16px;border-radius:8px;overflow:hidden;margin-top:12px;">
+        <div style="width:58%;background:var(--chart1)"></div>
+        <div style="width:27%;background:var(--chart2)"></div>
+        <div style="width:15%;background:var(--chart3)"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSettings() {
+  return `
+    <div class="page-title">設定</div>
+    <div class="setting-group-title">廣告設定</div>
+    <div class="setting-group">
+      <div class="setting-item">
+        <label>發布商 ID</label>
+        <input type="text" id="pubIdInput" value="${state.pubId}" placeholder="ca-pub-1692670290595476" onchange="savePubId(this.value)">
+      </div>
+      <div class="setting-item">
+        <label>廣告密度</label>
+        <div class="seg-ctrl">
+          ${['low','medium','high'].map(d=>`<button class="seg-btn ${state.adDensity===d?'active':''}" onclick="setAdDensity('${d}')">${d==='low'?'低':d==='medium'?'中':'高'}</button>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="setting-group-title">外觀</div>
+    <div class="setting-group">
+      <div class="setting-item">
+        <label>深色模式</label>
+        <button class="toggle ${state.theme==='dark'?'on':''}" onclick="toggleTheme()"></button>
+      </div>
+    </div>
+    <div class="setting-group-title">資料</div>
+    <div class="setting-group">
+      <button class="setting-action" onclick="clearCache()">清除快取資料</button>
+    </div>
+    <div class="setting-group-title">關於</div>
+    <div class="setting-group">
+      <div class="setting-item"><label>版本</label><span style="color:var(--text3);font-size:13px">1.0.0</span></div>
+      <div class="setting-item"><label>應用名稱</label><span style="color:var(--text3);font-size:13px">焦點日報</span></div>
+    </div>
+    <div class="about-text">
+      焦點日報 — 智慧新聞聚合應用<br>
+      整合 Google AdSense 自適應廣告單元<br>
+      支援 PWA 安裝至手機桌面<br><br>
+      © 2026 焦點日報 版權所有
+    </div>
+  `;
+}
+
+function renderTabBar() {
+  const tabs = [
+    {icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,label:'首頁'},
+    {icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`,label:'分類'},
+    {icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,label:'收益'},
+    {icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,label:'設定'},
+  ];
+  return `<div class="tab-bar">${tabs.map((t,i)=>`<button class="tab-item ${state.tab===i?'active':''}" onclick="switchTab(${i})">${t.icon}<span>${t.label}</span></button>`).join('')}</div>`;
+}
+
+// === ACTIONS ===
+function switchTab(i) { state.tab=i; render(); }
+function switchCat(c) { state.cat=c; render(); }
+function toggleTheme() {
+  state.theme = state.theme==='dark'?'light':'dark';
+  render();
+}
+function savePubId(v) {
+  state.pubId=v;
+  localStorage.setItem('pubId',v);
+  showToast('發布商 ID 已儲存');
+}
+function setAdDensity(d) {
+  state.adDensity=d;
+  localStorage.setItem('adDensity',d);
+  render();
+}
+function clearCache() {
+  localStorage.clear();
+  if('caches' in window) caches.keys().then(k=>k.forEach(n=>caches.delete(n)));
+  showToast('快取已清除');
+}
+
+// === ARTICLE ===
+function openArticle(idx) {
+  state.currentArticle = NEWS[idx];
+  const av = $('#articleView');
+  const ab = $('#articleBody');
+  // Show interstitial ad first
+  showInterstitial(()=>{
+    ab.innerHTML = `
+      <h1>${state.currentArticle.title}</h1>
+      <div class="article-meta">
+        <span class="asrc">${state.currentArticle.src}</span>
+        <span>${state.currentArticle.time}</span>
+        <span>${state.currentArticle.cat}</span>
+      </div>
+      <div class="article-img" style="background-image:url('${state.currentArticle.img}');background-size:cover;background-position:center;"></div>
+      <p>${state.currentArticle.body}</p>
+      <p>根據業內人士透露，相關政策的後續影響仍在持續評估中。市場觀察人士普遍認為，這一發展將對相關產業鏈產生深遠影響，投資人應密切關注後續動態。</p>
+      <div class="article-ad ad-unit">
+        <div class="ad-placeholder">
+          <!-- AdSense 文章內廣告 -->
+          <ins class="adsbygoogle"
+               style="display:block;text-align:center"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="${state.pubId}"
+               data-ad-slot="IN_ARTICLE_SLOT_ID"></ins>
+          <span>文章內廣告 · In-article Ad</span>
+        </div>
+      </div>
+      <p>分析師指出，短期內市場可能出現較大幅度的波動，但長期來看，基本面的改善趨勢不會改變。建議投資人保持理性，避免追高殺低，把握結構性機會。</p>
+      <p>本報將持續追蹤相關發展，為讀者提供最即時、最深入的報導與分析。</p>
+    `;
+    av.classList.add('open');
+    state.articleOpen = true;
+    // Try to push ads (will only work with real AdSense)
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  });
+}
+
+function closeArticle() {
+  $('#articleView').classList.remove('open');
+  state.articleOpen = false;
+}
+
+// === INTERSTITIAL ===
+let interTimer;
+function showInterstitial(callback) {
+  const el = $('#interstitial');
+  el.classList.add('show');
+  let sec = 3;
+  const timerEl = $('#interTimer');
+  interTimer = setInterval(()=>{
+    sec--;
+    if(timerEl) timerEl.innerHTML = `廣告將在 <strong>${sec}</strong> 秒後關閉`;
+    if(sec<=0) {
+      clearInterval(interTimer);
+      el.classList.remove('show');
+      if(callback) callback();
+    }
+  },1000);
+}
+function closeInterstitial() {
+  clearInterval(interTimer);
+  $('#interstitial').classList.remove('show');
+}
+
+// === EVENT BINDINGS ===
+function bindEvents() {
+  // Pull-to-refresh simulation
+  const feed = $('#feed');
+  if(!feed) return;
+  let startY=0, pulling=false;
+  feed.addEventListener('touchstart',e=>{
+    if(feed.scrollTop===0) startY=e.touches[0].clientY;
+  },{passive:true});
+  feed.addEventListener('touchmove',e=>{
+    const dy = e.touches[0].clientY - startY;
+    if(dy>50 && feed.scrollTop===0) {
+      const hint=$('#ptrHint');
+      if(hint) hint.classList.add('visible');
+      pulling=true;
+    }
+  },{passive:true});
+  feed.addEventListener('touchend',()=>{
+    if(pulling) {
+      const hint=$('#ptrHint');
+      if(hint) hint.classList.remove('visible');
+      pulling=false;
+      showToast('內容已更新');
+    }
+  },{passive:true});
+  // Back button for article
+  window.onpopstate = ()=>{ if(state.articleOpen) closeArticle(); };
+}
+
+// === INIT ===
+render();
+
+// === SERVICE WORKER REGISTRATION ===
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+// Try to init AdSense ads (will only work with valid publisher ID)
+try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+</script>
+</body>
+</html>
